@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class GingerbreadMan {
 
-    //VARIABLE DECLARATION SECTION
+    //VARIABLE DECLARATION SECTION!
     //Here's where you state which variables you are going to use.
     public String name;               //name of the hero
     public int xpos;                  //the x position

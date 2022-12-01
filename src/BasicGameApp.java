@@ -6,8 +6,6 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-// new comment
-
 public class BasicGameApp implements Runnable {
 
     //Variable Definition Section
