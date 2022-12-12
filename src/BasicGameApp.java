@@ -1,5 +1,7 @@
 
 //Graphics Libraries
+import sun.net.www.content.audio.wav;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.*;
@@ -24,13 +26,15 @@ public class BasicGameApp implements Runnable {
     public BufferStrategy bufferStrategy;
     public Image GingerbreadMan;
     public Image mouthPic;
-
+    public Image mouthLeftPic;
     public Image backgroundPic;
     public GingerbreadMan ginger;
 
     public GingerbreadMan mouth;
 
     public boolean didCrash = false;
+    public SoundFile themeMusic;
+    public SoundFile DooohSound;
 
     // Main method definition
     // This is the code that runs first and automatically
@@ -54,7 +58,12 @@ public class BasicGameApp implements Runnable {
         mouthPic = Toolkit.getDefaultToolkit().getImage("Mouth.png");
         mouth = new GingerbreadMan("mouth",400,200);
 
+        mouthLeftPic = Toolkit.getDefaultToolkit().getImage("Mouth copy.png");
+        mouth = new GingerbreadMan("mouth",400,200);
+
         backgroundPic = Toolkit.getDefaultToolkit().getImage("GingerbreadHouse.png");
+
+        DooohSound = new SoundFile("DooohSound.wav");
 
     } // end BasicGameApp constructor
 
@@ -75,9 +84,9 @@ public class BasicGameApp implements Runnable {
             render();  // paint the graphics
             pause(20); // sleep for 10 ms
 
-                //new Thread(run).start();
-            }
+            //new Thread(run).start();
         }
+    }
 
     public void moveThings() {
         //calls the move( ) code in the objects
@@ -88,16 +97,22 @@ public class BasicGameApp implements Runnable {
     }
 
     public void crash() {
-       if (ginger.rec.intersects(mouth.rec) && didCrash == false) {
+        if (ginger.rec.intersects(mouth.rec) && didCrash == false) {
             didCrash = true;
             System.out.println("Crash");
-            ginger.width = ginger.width*2;
-            ginger.height = ginger.height*2;
-
-        }
-        if (ginger.rec.intersects(mouth.rec)) {
             ginger.dx = -ginger.dx;
             mouth.dx = -mouth.dx;
+            DooohSound.play();
+
+            if (ginger.width > ginger.minWidth) {
+                ginger.width = ginger.width / 2;
+                ginger.height = ginger.height / 2;
+
+            }
+
+        }
+        if (!ginger.rec.intersects(mouth.rec)) {
+            didCrash = false;
         }
     }
 
@@ -146,16 +161,22 @@ public class BasicGameApp implements Runnable {
 
         g.drawImage(backgroundPic, 0,0, WIDTH, HEIGHT, null);
 
+        if (mouth.dx > 0) {
+            g.drawImage(mouthPic, mouth.xpos, mouth.ypos, mouth.width, mouth.height, null);
+        } else {
+            g.drawImage(mouthLeftPic, mouth.xpos, mouth.ypos, mouth.width, mouth.height, null);
+        }
+        g.drawRect(ginger.rec.x, ginger.rec.y, ginger.rec.width, ginger.rec.height);
         //draw the image of the astronaut
         g.drawImage(GingerbreadMan, ginger.xpos, ginger.ypos, ginger.width, ginger.height, null);
+        g.drawRect(mouth.rec.x, mouth.rec.y, mouth.rec.width, mouth.rec.height);
 
-
-        g.drawImage(mouthPic, mouth.xpos, mouth.ypos, mouth.width, mouth.height, null);
+//        g.drawImage(mouthPic, mouth.xpos, mouth.ypos, mouth.width, mouth.height, null);
 
         g.dispose();
         bufferStrategy.show();
 
 
     }
-        //new Thread(run).start();
+    //new Thread(run).start();
 }

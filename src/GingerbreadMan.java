@@ -11,6 +11,9 @@ public class GingerbreadMan {
     public int dy;                    //the speed of the hero in the y direction
     public int width;                 //the width of the hero image
     public int height;                //the height of the hero image
+    public int maxWidth = 350;
+
+    public int minWidth = 50;
     public boolean isAlive;           //a boolean to denote if the hero is alive or dead
     public Rectangle rec;
 
@@ -21,8 +24,8 @@ public class GingerbreadMan {
         name = pName;
         xpos = pXpos;
         ypos = pYpos;
-        dx = (int)(Math.random()*15);
-        dy = (int)(Math.random()*5);
+        dx = (int)(Math.random()*15+1);
+        dy = (int)(Math.random()*5+1);
         width = 110;
         height = 110;
         isAlive = true;
@@ -48,7 +51,10 @@ public class GingerbreadMan {
 
             dx = -dx;
         }
-        if (ypos >=700 - height ||ypos <= 0){
+        if (ypos >=700 - height && dy > 0) { // bottom
+            dy = -dy;
+        }
+        if (ypos <= 0 && dy < 0){
             dy = -dy;
         }
         rec = new Rectangle(xpos, ypos, width, height);
